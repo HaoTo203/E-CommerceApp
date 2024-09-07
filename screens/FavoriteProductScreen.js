@@ -29,8 +29,6 @@ function FavoriteProductScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ProductList
-        // TODO: Get data from database
-        // TODO: Handle remove product from favorite
         items={userDataContext.favoriteProducts}
         listOptions={{
           numColumns: 2,

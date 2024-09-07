@@ -13,7 +13,6 @@ import { genderData } from "../../constants/data";
 import { changePassword, login } from "../../util/auth";
 import { UserDataContext } from "../../store/user-data-context";
 
-// TODO: add some feedback after change info
 function ChangeProfileScreen({ route, navigation }) {
   const [selectedGender, setSelectedGender] = useState(null);
   const [enteredFirstName, setEnteredFirstName] = useState("");

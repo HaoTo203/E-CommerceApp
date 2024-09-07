@@ -32,8 +32,6 @@ import {
 } from "../../util/http";
 import { UserDataContext } from "../../store/user-data-context";
 
-// TODO: Handle right button
-// TODO: Add logic
 function ProductDetailScreen({ route, navigation }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [productSize, setProductSize] = useState(0);

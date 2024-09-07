@@ -235,8 +235,11 @@ function HomeScreen({ navigation }) {
           </View>
 
           <CategoryList
-            onItemPress={(type) => {
-              navigation.navigate("ContentScreen", { type: type });
+            onItemPress={(type, title) => {
+              navigation.navigate("ContentScreen", {
+                type: type,
+                title: title,
+              });
             }}
             items={category}
             listOptions={{
@@ -255,14 +258,16 @@ function HomeScreen({ navigation }) {
             <TextButton
               textStyle={styles.textButton}
               onPress={() => {
-                navigation.navigate("ContentScreen", { type: "flash_sale" });
+                navigation.navigate("ContentScreen", {
+                  type: "flash_sale",
+                  title: "Flash Sale",
+                });
               }}
             >
               See More
             </TextButton>
           </View>
           <ProductList
-            // TODO: Get data from database
             items={flashSaleProducts}
             listOptions={{
               initialNumToRender: 2,
@@ -278,7 +283,10 @@ function HomeScreen({ navigation }) {
             <Text style={styles.titleText}>Mega Sale</Text>
             <TextButton
               onPress={() => {
-                navigation.navigate("ContentScreen", { type: "mega_sale" });
+                navigation.navigate("ContentScreen", {
+                  type: "mega_sale",
+                  title: "Mega Sale",
+                });
               }}
               textStyle={styles.textButton}
             >
@@ -286,7 +294,6 @@ function HomeScreen({ navigation }) {
             </TextButton>
           </View>
           <ProductList
-            // TODO: Get data from database
             items={megaSaleProducts}
             listOptions={{
               initialNumToRender: 2,
@@ -305,13 +312,11 @@ function HomeScreen({ navigation }) {
               minHeight: 200,
               resizeMode: "contain",
             }}
-            // TODO: Get the banner from database
             source={{ uri: allBanners[0]?.imageUri }}
           />
         </View>
         <View style={styles.listContainer}>
           <ProductList
-            // TODO: Get data from database
             items={recommendProducts}
             listOptions={{
               numColumns: 2,

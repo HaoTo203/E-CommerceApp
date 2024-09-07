@@ -22,8 +22,6 @@ import {
 } from "../util/http";
 import { AuthContext } from "../store/auth-context";
 import { UserDataContext } from "../store/user-data-context";
-// TODO: Get data
-// TODO: Add logic
 function CartScreen({ navigation }) {
   const authContext = useContext(AuthContext);
   const userDataContext = useContext(UserDataContext);

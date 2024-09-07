@@ -10,8 +10,7 @@ import { starNumber } from "../constants/data";
 import { AuthContext } from "../store/auth-context";
 import { fetchReviews } from "../util/http";
 
-// TODO: Add filter review
-// TODO: Get data
+// TODO: fetch review image
 function ReviewScreen({ route, navigation }) {
   const [selectedRate, setSelectedRate] = useState(0);
   const [allReviews, setAllReviews] = useState([]);

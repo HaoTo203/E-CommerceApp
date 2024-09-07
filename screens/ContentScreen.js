@@ -11,9 +11,10 @@ function ContentScreen({ navigation, route }) {
   const [products, setProducts] = useState([]);
   const authContext = useContext(AuthContext);
   const type = route.params?.type;
+  const title = route.params?.title;
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Screen...",
+      title: title,
       headerRight: ({ tintColor }) => {
         return (
           <IconButton
@@ -34,7 +35,9 @@ function ContentScreen({ navigation, route }) {
           try {
             const temp = await getProductById(authContext.token, item);
             products.push(temp);
-          } catch (error) {}
+          } catch (error) {
+            console.log(error.message);
+          }
         }
         setProducts(products);
       } catch (error) {

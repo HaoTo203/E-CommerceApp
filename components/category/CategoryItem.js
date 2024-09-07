@@ -5,7 +5,7 @@ function CategoryItem({ data, onPress }) {
   return (
     <Pressable
       onPress={() => {
-        onPress(data.type);
+        onPress(data.type, data.title);
       }}
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.7 }]}
     >

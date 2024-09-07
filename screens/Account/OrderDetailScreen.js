@@ -60,12 +60,10 @@ function OrderDetailScreen({ route }) {
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Shipping</Text>
-            {/* TODO: get Shipping department */}
             <Text style={styles.value}>POS Reggular</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>No. Resi</Text>
-            {/* TODO: get resi */}
             <Text style={styles.value}>000192848573</Text>
           </View>
           <View style={styles.row}>

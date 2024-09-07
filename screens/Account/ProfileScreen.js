@@ -23,8 +23,6 @@ import { getFormattedDate } from "../../util/date";
 import { UserDataContext } from "../../store/user-data-context";
 import { launchCameraAsync } from "expo-image-picker";
 
-// TODO: change user avatar
-
 function ProfileScreen({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
