@@ -412,3 +412,19 @@ export async function updateUserNotifications(token, userId, data) {
     }
   );
 }
+
+export async function getUserNotificationsNotCheck(token, userId) {
+  const response = await axios.get(
+    BACKEND_URL +
+      `/users/${userId}/notifications.json?auth=${token}&orderBy="isChecked"&equalTo=false`,
+    {
+      timeout: 30000,
+    }
+  );
+  const not = [];
+  for (const key in response.data) {
+    not.push(response.data[key]);
+  }
+
+  return not;
+}

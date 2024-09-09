@@ -24,33 +24,11 @@ import {
   fetchProducts,
   getProductById,
   getProductIdByType,
+  getUserNotificationsNotCheck,
 } from "../util/http";
 import { AuthContext } from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { UserDataContext } from "../store/user-data-context";
-
-const dummyData3 = [
-  {
-    id: 1,
-    title: "Man Shirt",
-  },
-  {
-    id: 2,
-    title: "Man Shirt",
-  },
-  {
-    id: 3,
-    title: "Man Shirt",
-  },
-  {
-    id: 4,
-    title: "Man Shirt",
-  },
-  {
-    id: 5,
-    title: "Man Shirt",
-  },
-];
 
 function HomeScreen({ navigation }) {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -60,6 +38,7 @@ function HomeScreen({ navigation }) {
   const [category, setCategory] = useState([]);
   const [allBanners, setAllBanners] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [notifNum, setNotifNum] = useState(0);
 
   const authContext = useContext(AuthContext);
   const userDataContext = useContext(UserDataContext);
@@ -103,11 +82,23 @@ function HomeScreen({ navigation }) {
               <IconButton
                 style={{ borderWidth: 0, padding: 8 }}
                 icon={
-                  <Ionicons
-                    name="notifications-outline"
-                    size={24}
-                    color={Colors.Neutral_Grey}
-                  />
+                  <View>
+                    <Ionicons
+                      name="notifications-outline"
+                      size={24}
+                      color={
+                        notifNum == 0 ? Colors.Neutral_Grey : Colors.Primary_Red
+                      }
+                    />
+
+                    {notifNum != 0 && (
+                      <View style={styles.numberOfNotificationContainer}>
+                        <Text style={styles.numberOfNotificationText}>
+                          {notifNum}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
                 }
                 onPress={() => {
                   navigation.navigate("NotificationScreen");
@@ -118,7 +109,7 @@ function HomeScreen({ navigation }) {
         );
       },
     });
-  }, [navigation]);
+  }, [navigation, notifNum]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -209,6 +200,23 @@ function HomeScreen({ navigation }) {
     }
     getData();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", async () => {
+      try {
+        const response = await getUserNotificationsNotCheck(
+          authContext.token,
+          authContext.uid
+        );
+        setNotifNum(response.length);
+      } catch (error) {
+        // handle exception
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
 
   if (isLoading) {
     return <LoadingOverlay message={""} />;
@@ -380,5 +388,22 @@ const styles = StyleSheet.create({
   },
   textButton: {
     fontSize: 18,
+  },
+
+  numberOfNotificationContainer: {
+    position: "absolute",
+    left: "70%",
+    bottom: "70%",
+    width: 16,
+    height: 16,
+    borderRadius: 12,
+    backgroundColor: Colors.Primary_Red,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  numberOfNotificationText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: Colors.Background_White,
   },
 });
