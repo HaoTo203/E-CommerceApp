@@ -20,3 +20,15 @@ export function getMMMDDYYYFormattedDate(dateString) {
   });
   return formattedDate;
 }
+
+export function getMMMDDYYY_HHMMFormattedDate(dateString) {
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return formattedDate;
+}

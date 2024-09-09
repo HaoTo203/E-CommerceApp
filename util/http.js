@@ -366,3 +366,49 @@ export async function getProductIdByType(token, type, number) {
 
   return productIds;
 }
+
+export async function getNotificationById(token, notId) {
+  const response = await axios.get(
+    BACKEND_URL + `/notifications/${notId}.json?auth=${token}`,
+    {
+      timeout: 30000,
+    }
+  );
+
+  const notification = {
+    notificationId: notId,
+    ...response.data,
+  };
+
+  return notification;
+}
+
+export async function fetchUserNotifications(token, userId) {
+  const response = await axios.get(
+    BACKEND_URL + `/users/${userId}/notifications.json?auth=${token}`,
+    {
+      timeout: 30000,
+    }
+  );
+  const notifications = [];
+
+  for (const key in response.data) {
+    const not = {
+      userNotId: key,
+      ...response.data[key],
+    };
+    notifications.push(not);
+  }
+
+  return notifications;
+}
+
+export async function updateUserNotifications(token, userId, data) {
+  return axios.patch(
+    BACKEND_URL +
+      `/users/${userId}/notifications/${data.userNotId}/.json?auth=${token}`,
+    {
+      isChecked: true,
+    }
+  );
+}

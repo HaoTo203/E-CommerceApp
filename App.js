@@ -33,7 +33,6 @@ import SuccessScreen from "./screens/SuccessScreen";
 import SearchResultScreen from "./screens/Search/SearchResultScreen";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import LoadingOverlay from "./components/ui/LoadingOverlay";
 import ForgotPasswordScreen from "./screens/ResetAccount/ForgotPasswordScreen";
 import VerificationScreen from "./screens/ResetAccount/VerificationScreen";
 import ResetPasswordScreen from "./screens/ResetAccount/ResetPasswordScreen";
@@ -41,6 +40,17 @@ import * as SplashScreen from "expo-splash-screen";
 import UserDataContextProvider, {
   UserDataContext,
 } from "./store/user-data-context";
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    };
+  },
+});
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
@@ -134,7 +144,11 @@ function AuthenticatedStack() {
         name="WriteReviewScreen"
         component={WriteReviewScreen}
       />
-      <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+      <Stack.Screen
+        options={{ title: "Notifications" }}
+        name="NotificationScreen"
+        component={NotificationScreen}
+      />
       <Stack.Screen
         name="NotificationDetailScreen"
         component={NotificationDetailScreen}
