@@ -91,7 +91,7 @@ function NotificationDetailScreen({ route, navigation }) {
                   color={Colors.Primary_Blue}
                 />
               </View>
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.title}>{item.item.title}</Text>
                 <Text style={styles.description}>{item.item.content}</Text>
                 <Text style={styles.date}>

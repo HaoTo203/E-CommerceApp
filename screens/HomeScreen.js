@@ -1,6 +1,7 @@
 import {
   Image,
   Keyboard,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -37,8 +38,8 @@ function HomeScreen({ navigation }) {
   const [recommendProducts, setRecommendProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [allBanners, setAllBanners] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [notifNum, setNotifNum] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
 
   const authContext = useContext(AuthContext);
   const userDataContext = useContext(UserDataContext);
@@ -69,7 +70,7 @@ function HomeScreen({ navigation }) {
                 icon={
                   <Ionicons
                     name="heart-outline"
-                    size={24}
+                    size={28}
                     color={Colors.Neutral_Grey}
                   />
                 }
@@ -85,7 +86,7 @@ function HomeScreen({ navigation }) {
                   <View>
                     <Ionicons
                       name="notifications-outline"
-                      size={24}
+                      size={28}
                       color={
                         notifNum == 0 ? Colors.Neutral_Grey : Colors.Primary_Red
                       }
@@ -94,7 +95,7 @@ function HomeScreen({ navigation }) {
                     {notifNum != 0 && (
                       <View style={styles.numberOfNotificationContainer}>
                         <Text style={styles.numberOfNotificationText}>
-                          {notifNum}
+                          {notifNum > 99 ? "99+" : notifNum}
                         </Text>
                       </View>
                     )}
@@ -111,93 +112,89 @@ function HomeScreen({ navigation }) {
     });
   }, [navigation, notifNum]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    async function getData() {
-      try {
-        const banners = await fetchBanners(authContext.token);
-        setAllBanners(banners);
+  async function getData() {
+    try {
+      setRefreshing(true);
+      const banners = await fetchBanners(authContext.token);
+      setAllBanners(banners);
 
-        const cate = await fetchCategory(authContext.token);
-        setCategory(cate);
+      const cate = await fetchCategory(authContext.token);
+      setCategory(cate);
 
-        const flashSaleProductIds = await getProductIdByType(
-          authContext.token,
-          "flash_sale",
-          3
-        );
-        let temps = [];
-        for (const item of flashSaleProductIds) {
-          try {
-            const temp = await getProductById(authContext.token, item);
-            temps.push(temp);
-          } catch (error) {}
-        }
-        setFlashSaleProducts(temps);
-
-        const megaSaleProductIds = await getProductIdByType(
-          authContext.token,
-          "mega_sale",
-          3
-        );
-        temps = [];
-        for (const item of megaSaleProductIds) {
-          try {
-            const temp = await getProductById(authContext.token, item);
-            temps.push(temp);
-          } catch (error) {}
-        }
-        setMegaSaleProducts(temps);
-
-        const recommendProductIds = await getProductIdByType(
-          authContext.token,
-          "recommend"
-        );
-        temps = [];
-        for (const item of recommendProductIds) {
-          try {
-            const temp = await getProductById(authContext.token, item);
-            temps.push(temp);
-          } catch (error) {}
-        }
-        setRecommendProducts(temps);
-
-        const favoriteProductsId = await fetchFavoriteProducts(
-          authContext.token,
-          authContext.uid
-        );
-        temps = [];
-        for (const item of favoriteProductsId) {
-          try {
-            const temp = await getProductById(
-              authContext.token,
-              item.productId
-            );
-            temps.push(temp);
-          } catch (error) {}
-        }
-        userDataContext.changeFavoriteProducts(temps);
-
-        const cartProductsId = await fetchCartProducts(
-          authContext.token,
-          authContext.uid
-        );
-        temps = [];
-        for (const item of cartProductsId) {
-          try {
-            const temp = await getProductById(
-              authContext.token,
-              item.productId
-            );
-            temps.push({ ...temp, quantity: item.quantity });
-          } catch (error) {}
-        }
-        userDataContext.changeCartProducts(temps);
-      } catch (error) {
-        console.log(error.message);
+      const flashSaleProductIds = await getProductIdByType(
+        authContext.token,
+        "flash_sale",
+        3
+      );
+      let temps = [];
+      for (const item of flashSaleProductIds) {
+        try {
+          const temp = await getProductById(authContext.token, item);
+          temps.push(temp);
+        } catch (error) {}
       }
-      setIsLoading(false);
+      setFlashSaleProducts(temps);
+
+      const megaSaleProductIds = await getProductIdByType(
+        authContext.token,
+        "mega_sale",
+        3
+      );
+      temps = [];
+      for (const item of megaSaleProductIds) {
+        try {
+          const temp = await getProductById(authContext.token, item);
+          temps.push(temp);
+        } catch (error) {}
+      }
+      setMegaSaleProducts(temps);
+
+      const recommendProductIds = await getProductIdByType(
+        authContext.token,
+        "recommend"
+      );
+      temps = [];
+      for (const item of recommendProductIds) {
+        try {
+          const temp = await getProductById(authContext.token, item);
+          temps.push(temp);
+        } catch (error) {}
+      }
+      setRecommendProducts(temps);
+
+      const favoriteProductsId = await fetchFavoriteProducts(
+        authContext.token,
+        authContext.uid
+      );
+      temps = [];
+      for (const item of favoriteProductsId) {
+        try {
+          const temp = await getProductById(authContext.token, item.productId);
+          temps.push(temp);
+        } catch (error) {}
+      }
+      userDataContext.changeFavoriteProducts(temps);
+
+      const cartProductsId = await fetchCartProducts(
+        authContext.token,
+        authContext.uid
+      );
+      temps = [];
+      for (const item of cartProductsId) {
+        try {
+          const temp = await getProductById(authContext.token, item.productId);
+          temps.push({ ...temp, quantity: item.quantity });
+        } catch (error) {}
+      }
+      userDataContext.changeCartProducts(temps);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setRefreshing(false);
     }
+  }
+
+  useEffect(() => {
     getData();
   }, []);
 
@@ -218,10 +215,6 @@ function HomeScreen({ navigation }) {
     };
   }, [navigation]);
 
-  if (isLoading) {
-    return <LoadingOverlay message={""} />;
-  }
-
   return (
     <TouchableWithoutFeedback
       style={styles.outerContainer}
@@ -230,7 +223,17 @@ function HomeScreen({ navigation }) {
         setIsSearchFocused(false);
       }}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              getData();
+            }}
+          />
+        }
+      >
         {/* Banner 1 Image Slider */}
         <View style={styles.banner1Container}>
           <ImageSlider src={allBanners} />
@@ -392,10 +395,10 @@ const styles = StyleSheet.create({
 
   numberOfNotificationContainer: {
     position: "absolute",
-    left: "70%",
-    bottom: "70%",
-    width: 16,
-    height: 16,
+    left: "50%",
+    bottom: "50%",
+    width: 24,
+    height: 24,
     borderRadius: 12,
     backgroundColor: Colors.Primary_Red,
     alignItems: "center",

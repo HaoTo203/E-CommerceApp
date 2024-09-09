@@ -15,14 +15,14 @@ function ContentScreen({ navigation, route }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: title,
-      headerRight: ({ tintColor }) => {
-        return (
-          <IconButton
-            style={{ borderWidth: 0, padding: 8 }}
-            icon={<Ionicons name="search" size={24} color={tintColor} />}
-          />
-        );
-      },
+      // headerRight: ({ tintColor }) => {
+      //   return (
+      //     <IconButton
+      //       style={{ borderWidth: 0, padding: 8 }}
+      //       icon={<Ionicons name="search" size={24} color={tintColor} />}
+      //     />
+      //   );
+      // },
     });
   }, [navigation]);
 
