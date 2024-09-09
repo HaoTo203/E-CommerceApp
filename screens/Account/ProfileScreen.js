@@ -1,6 +1,4 @@
 import {
-  Button,
-  FlatList,
   Image,
   Modal,
   Pressable,
@@ -16,12 +14,11 @@ import { Ionicons } from "@expo/vector-icons";
 import IconButton from "../../components/ui/IconButton";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
-import { profileSection } from "../../constants/data";
 import { fetchUserProfile, updateUserProfile } from "../../util/http";
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import { getFormattedDate } from "../../util/date";
 import { UserDataContext } from "../../store/user-data-context";
-import { launchCameraAsync } from "expo-image-picker";
+import { launchCameraAsync, launchImageLibraryAsync } from "expo-image-picker";
 
 function ProfileScreen({ navigation }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -50,22 +47,48 @@ function ProfileScreen({ navigation }) {
     getUserInfo();
   }, []);
 
-  async function pickImageHandler() {
-    // No permissions request is necessary for launching the image library
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.All,
-    //   allowsEditing: true,
-    //   aspect: [4, 3],
-    //   quality: 1,
-    // });
+  async function chooseImageHandler() {
+    /*
+      - Launch camera to take an image
+      - Upload image to storage and get uri
+      - Upload uri in realtime database
 
+      *Note: The storage is not provide rest api to upload image, need to use SDKs.
+      The code belove just upload direct uri from device to realtime database
+      so other user cannot load this image
+    */
+    try {
+      const image = await launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+      });
+      setAvatar(image.assets[0].uri);
+      const profile = userDataContext.profile;
+      profile.imageUri = image.assets[0].uri;
+      await updateUserProfile(authContext.token, authContext.uid, profile);
+      userDataContext.changeProfile(profile);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function pickImageHandler() {
+    /*
+      - Launch camera to take an image
+      - Upload image to storage and get uri
+      - Upload uri in realtime database
+
+      *Note: The storage is not provide rest api to upload image, need to use SDKs.
+      The code belove just upload direct uri from device to realtime database
+      so other user cannot load this image
+    */
     try {
       const image = await launchCameraAsync({
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.5,
       });
-      console.log(image.assets[0]);
       setAvatar(image.assets[0].uri);
       const profile = userDataContext.profile;
       profile.imageUri = image.assets[0].uri;
@@ -90,16 +113,6 @@ function ProfileScreen({ navigation }) {
           setIsModalVisible(false);
         }}
       >
-        {/* <View
-          style={{
-            marginTop: "auto",
-            backgroundColor: "blue",
-          }}
-        >
-          <View style={styles.footer}>
-            <Text style={styles.headerText}>This is Half Modal</Text>
-          </View>
-        </View> */}
         <TouchableOpacity
           style={{
             flex: 1,
@@ -137,6 +150,10 @@ function ProfileScreen({ navigation }) {
                 title="Take Picture"
               />
               <ListItem
+                onPress={() => {
+                  setIsModalVisible(false);
+                  chooseImageHandler();
+                }}
                 leftIcon={
                   <Ionicons
                     style={styles.icon}
