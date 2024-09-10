@@ -42,5 +42,7 @@ function ProductList({
 export default ProductList;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
 });

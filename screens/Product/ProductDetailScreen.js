@@ -1,5 +1,4 @@
 import {
-  Image,
   StyleSheet,
   View,
   ScrollView,
@@ -19,7 +18,6 @@ import { Rating } from "react-native-ratings";
 import { arrOfNumberToArrOfObject } from "../../util/DataConverter";
 import TextButton from "../../components/ui/TextButton";
 import Review from "../../components/product/Review";
-import CategoryList from "../../components/category/CategoryList";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { shoesColor, shoesSize } from "../../constants/data";
 import { AuthContext } from "../../store/auth-context";
@@ -29,6 +27,7 @@ import {
   deleteFavoriteProduct,
   fetchProducts,
   fetchReviews,
+  fetchUserProfile,
 } from "../../util/http";
 import { UserDataContext } from "../../store/user-data-context";
 
@@ -37,6 +36,7 @@ function ProductDetailScreen({ route, navigation }) {
   const [productSize, setProductSize] = useState(0);
   const [productColor, setProductColor] = useState("");
   const [allReviews, setAllReviews] = useState([]);
+  const [shownReview, setShownReview] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
   const authContext = useContext(AuthContext);
   const userDataContext = useContext(UserDataContext);
@@ -70,6 +70,18 @@ function ProductDetailScreen({ route, navigation }) {
           productData.productId
         );
         setAllReviews(reviews);
+
+        if (reviews.length != 0) {
+          const review = reviews.reduce((prev, current) =>
+            new Date(prev.date) > new Date(current.date) ? prev : current
+          );
+          const temp = await fetchUserProfile(authContext.token, review.userId);
+          setShownReview({
+            ...review,
+            username: temp.name,
+            userAvatar: temp.imageUri,
+          });
+        }
 
         const products = await fetchProducts(authContext.token);
         setSimilarProducts(
@@ -164,7 +176,6 @@ function ProductDetailScreen({ route, navigation }) {
       <ScrollView>
         {/* Product Image */}
         <View>
-          {/* TODO: change image id */}
           <ImageSlider src={[{ id: 1, imageUri: productData.imageUri }]} />
         </View>
 
@@ -344,13 +355,7 @@ function ProductDetailScreen({ route, navigation }) {
               {allReviews.length} Review{")"}
             </Text>
           </View>
-          {allReviews.length != 0 && (
-            <Review
-              data={allReviews.reduce((prev, current) =>
-                new Date(prev.date) > new Date(current.date) ? prev : current
-              )}
-            />
-          )}
+          {!!shownReview && <Review data={shownReview} />}
         </View>
 
         {/* Other Product */}

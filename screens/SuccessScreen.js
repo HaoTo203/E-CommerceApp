@@ -2,8 +2,6 @@ import { Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../constants/styles";
 import PrimaryButton from "../components/ui/PrimaryButton";
-import IconButton from "../components/ui/IconButton";
-import { StackActions, NavigationActions } from "@react-navigation/native";
 
 function SuccessScreen({ navigation }) {
   return (

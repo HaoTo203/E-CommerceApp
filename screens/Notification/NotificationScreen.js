@@ -6,7 +6,6 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { fetchUserNotifications } from "../../util/http";
 
-// TODO: Get data
 function NotificationScreen({ navigation }) {
   const authContext = useContext(AuthContext);
   const [offerNot, setOfferNot] = useState([]);
@@ -43,6 +42,7 @@ function NotificationScreen({ navigation }) {
     }
   };
 
+  // This function will run whenever the screen regain focus to fetch data
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       getData();

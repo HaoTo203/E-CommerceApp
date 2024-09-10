@@ -49,6 +49,29 @@ export const orderStatus = [
   },
 ];
 
+export const accountSection = [
+  {
+    id: 1,
+    title: "Profile",
+    icon: "person-outline",
+  },
+  {
+    id: 2,
+    title: "Order",
+    icon: "bag-outline",
+  },
+  {
+    id: 3,
+    title: "Address",
+    icon: "location-outline",
+  },
+  {
+    id: 4,
+    title: "Payment",
+    icon: "card-outline",
+  },
+];
+
 export const provinceData = [
   { idProvince: "01", name: "Thành phố Hà Nội" },
   { idProvince: "79", name: "Thành phố Hồ Chí Minh" },

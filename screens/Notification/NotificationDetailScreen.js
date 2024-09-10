@@ -6,8 +6,6 @@ import { getNotificationById, updateUserNotifications } from "../../util/http";
 import { AuthContext } from "../../store/auth-context";
 import { getMMMDDYYY_HHMMFormattedDate } from "../../util/date";
 
-// TODO: Change header
-// TODO: Get data
 function NotificationDetailScreen({ route, navigation }) {
   const [notifications, setNotifications] = useState([]);
   const authContext = useContext(AuthContext);

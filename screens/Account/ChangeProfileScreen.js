@@ -39,6 +39,7 @@ function ChangeProfileScreen({ route, navigation }) {
   }, [navigation]);
 
   useEffect(() => {
+    // Show the exist data
     if (formType !== "Change Password") {
       setEnteredFirstName(userDataContext.profile.name.firstName);
       setEnteredLastName(userDataContext.profile.name.lastName);
@@ -63,6 +64,8 @@ function ChangeProfileScreen({ route, navigation }) {
       if (!!selectedGender) {
         userProfile.gender = selectedGender.label;
       }
+
+      // Update data that don't need to check token
       const uploadData = async () => {
         try {
           await updateUserProfile(
@@ -81,6 +84,7 @@ function ChangeProfileScreen({ route, navigation }) {
       return;
     }
 
+    // Check credentials
     const newPasswordIsValid = enteredNewPassword.length >= 6;
     const confirmPasswordIsValid =
       enteredConfirmPassword === enteredNewPassword;
@@ -93,6 +97,11 @@ function ChangeProfileScreen({ route, navigation }) {
     if (!newPasswordIsValid || !confirmPasswordIsValid) {
       return;
     }
+
+    /*
+      To update the password user need to re authenticate if the app using other database type.
+      Here we using firebase provide user change password in about 60 minutes after authenticate.
+    */
 
     const response = async () => {
       try {

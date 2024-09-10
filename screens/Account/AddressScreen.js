@@ -14,6 +14,10 @@ import { useContext, useEffect, useState } from "react";
 import { fetchAddress } from "../../util/http";
 import { AuthContext } from "../../store/auth-context";
 
+/*
+  This screen using for add new address and also use for user choose address when checkout
+*/
+
 function AddressScreen({ route, navigation }) {
   const [selectedItem, setSelectedItem] = useState({});
   const [allAddress, setAllAddress] = useState([]);
@@ -88,6 +92,11 @@ function AddressScreen({ route, navigation }) {
           );
         }}
       />
+
+      {/* 
+        Change logic of the button to match whenever screen use for add new address or
+        help user select address when check out.
+      */}
       <PrimaryButton
         onPress={() => {
           if (!!!data) {

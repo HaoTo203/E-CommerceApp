@@ -7,7 +7,6 @@ function RecommendForm({ data }) {
 
   return (
     <FlatList
-      keyboardShouldPersistTaps="handled"
       data={data}
       keyExtractor={(item) => item.id}
       renderItem={(dataItem) => {

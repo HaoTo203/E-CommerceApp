@@ -37,7 +37,7 @@ function SearchScreen({ navigation }) {
           <>
             {/* Search Container */}
             <View style={[styles.searchContainer]}>
-              {/* Voice */}
+              {/* Back Button */}
               <IconButton
                 style={{ borderWidth: 0, paddingLeft: 8 }}
                 icon={
@@ -51,6 +51,8 @@ function SearchScreen({ navigation }) {
                   navigation.goBack();
                 }}
               />
+
+              {/* Input Search */}
               <Input
                 style={styles.searchInput}
                 placeHolder="Search Product"
@@ -60,9 +62,6 @@ function SearchScreen({ navigation }) {
                   autoFocus: true,
                 }}
                 iconColor={Colors.Primary_Blue}
-                onPress={() => {
-                  navigation.navigate("SearchScreen");
-                }}
               />
 
               {/* Voice */}

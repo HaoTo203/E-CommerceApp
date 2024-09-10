@@ -112,6 +112,7 @@ function HomeScreen({ navigation }) {
     });
   }, [navigation, notifNum]);
 
+  // This function using function from util http to fetch data
   async function getData() {
     try {
       setRefreshing(true);
@@ -194,10 +195,12 @@ function HomeScreen({ navigation }) {
     }
   }
 
+  // Fetch data when this screen run the first time
   useEffect(() => {
     getData();
   }, []);
 
+  // Fetch new notification whenever this screen regain focus
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", async () => {
       try {
@@ -326,6 +329,8 @@ function HomeScreen({ navigation }) {
             source={{ uri: allBanners[0]?.imageUri }}
           />
         </View>
+
+        {/* Recommend Products */}
         <View style={styles.listContainer}>
           <ProductList
             items={recommendProducts}

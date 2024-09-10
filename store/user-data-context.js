@@ -1,5 +1,7 @@
 import { createContext, useState } from "react";
 
+// This context use for save user data when app is running
+
 export const UserDataContext = createContext({
   favoriteProducts: [],
   addFavoriteProduct: () => {},
@@ -61,6 +63,7 @@ function UserDataContextProvider({ children }) {
     );
   }
 
+  // user profile
   function changeProfile(data) {
     setProfile(data);
   }

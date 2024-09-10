@@ -1,4 +1,10 @@
-import axios, { HttpStatusCode } from "axios";
+/*
+  This app using firebase authentication to authenticate user
+  The code belove using axios and authentication REST api to connect to database, 
+  not using SDKs.
+*/
+
+import axios from "axios";
 
 async function authenticate(mode, email, password) {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${process.env.EXPO_PUBLIC_API_KEY}`;

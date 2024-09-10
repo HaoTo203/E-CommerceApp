@@ -105,6 +105,7 @@ function ProfileScreen({ navigation }) {
 
   return (
     <>
+      {/* This modal use for change user avatar */}
       <Modal
         animationType="slide"
         transparent={true}

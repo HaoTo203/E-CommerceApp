@@ -1,3 +1,10 @@
+/*
+  This app using realtime database of firebase
+  This file create to store function that connect to database
+  The code belove using axios and realtime REST api to connect to database, 
+  not using SDKs.
+*/
+
 import axios from "axios";
 
 const BACKEND_URL =
@@ -84,18 +91,18 @@ export async function getProductById(token, productId) {
 
 export async function getCouponByCode(token, code) {
   const response = await axios.get(
-    BACKEND_URL + `/coupons.json?auth=${token}`,
+    BACKEND_URL +
+      `/coupons.json?auth=${token}&orderBy="code"&equalTo="${code}"`,
     {
       timeout: 30000,
     }
   );
+  const coupons = [];
 
   for (const key in response.data) {
-    if (code === response.data[key].code) {
-      return response.data[key];
-    }
+    coupons.push(response.data[key]);
   }
-  return null;
+  return coupons;
 }
 
 export async function fetchProducts(token) {
@@ -153,11 +160,7 @@ export async function fetchReviews(token, productId) {
   for (const key in response.data) {
     const review = {
       reviewId: key,
-      userId: response.data[key].userId,
-      rating: response.data[key].rating,
-      review: response.data[key].review,
-      date: response.data[key].date,
-      imageUri: response.data[key].imageUri,
+      ...response.data[key],
     };
     reviews.push(review);
   }
@@ -362,7 +365,7 @@ export async function getProductIdByType(token, type, number) {
       timeout: 30000,
     }
   );
-  const productIds = response.data;
+  const productIds = response.data?.filter((item) => item != null);
 
   return productIds;
 }

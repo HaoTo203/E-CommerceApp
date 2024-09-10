@@ -8,23 +8,6 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import { orderStatus } from "../../constants/data";
 import { getMMMDDYYYFormattedDate } from "../../util/date";
 
-const dummyData2 = [
-  {
-    id: 1,
-    brand: "Nike Air Zoom Pegasus 36 Miami",
-    price: 299.43,
-    isLiked: true,
-    quantity: 1,
-  },
-  {
-    id: 2,
-    brand: "Nike Air Zoom Pegasus 36 Miami",
-    price: 299.43,
-    isLiked: false,
-    quantity: 1,
-  },
-];
-
 function OrderDetailScreen({ route }) {
   const order = route.params.order;
 
@@ -125,7 +108,7 @@ function OrderDetailScreen({ route }) {
       <PrimaryButton
         style={{ marginBottom: 16, marginHorizontal: 8 }}
         onPress={() => {
-          // TODO: turn on notification
+          // TODO: turn on notification to notify whenever orders status change
         }}
       >
         Notify Me

@@ -8,9 +8,8 @@ import Review from "../components/product/Review";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import { starNumber } from "../constants/data";
 import { AuthContext } from "../store/auth-context";
-import { fetchReviews } from "../util/http";
+import { fetchReviews, fetchUserProfile } from "../util/http";
 
-// TODO: fetch review image
 function ReviewScreen({ route, navigation }) {
   const [selectedRate, setSelectedRate] = useState(0);
   const [allReviews, setAllReviews] = useState([]);
@@ -19,18 +18,32 @@ function ReviewScreen({ route, navigation }) {
 
   const authContext = useContext(AuthContext);
 
+  // Fetch new data whenever this screen regain focus
   useEffect(() => {
-    async function getReviews() {
+    const unsubscribe = navigation.addListener("focus", async () => {
       try {
-        const reviews = await fetchReviews(authContext.token, productId);
+        const temps = await fetchReviews(authContext.token, productId);
+
+        const reviews = [];
+        for (const review of temps) {
+          const temp = await fetchUserProfile(authContext.token, review.userId);
+          reviews.push({
+            ...review,
+            username: temp.name,
+            userAvatar: temp.imageUri,
+          });
+        }
+
         setAllReviews(reviews);
         setShownReviews(reviews);
       } catch (error) {
         console.log(error.message);
       }
-    }
-    getReviews();
-  }, []);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
 
   return (
     <>

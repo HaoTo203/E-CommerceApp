@@ -27,6 +27,7 @@ function Input({
   const inputRef = useRef(null);
 
   useEffect(() => {
+    // This function will be trigger whenever the keyboard is hide so the text input loose focus
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
@@ -53,6 +54,7 @@ function Input({
           <Ionicons
             style={styles.icon}
             name={leftIcon}
+            // Change color base on focus, not focus, input text error
             color={
               isError
                 ? Colors.Primary_Red
@@ -84,6 +86,7 @@ function Input({
 
         {!!rightIcon && rightIcon}
       </View>
+      {/* Show error text when input text wrong */}
       {isError && !!errorText && (
         <Text style={styles.errorText}>{errorText}</Text>
       )}

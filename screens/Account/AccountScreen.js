@@ -2,36 +2,12 @@ import { FlatList, StyleSheet, View } from "react-native";
 import ListItem from "../../components/ui/list/ListItem";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
-
-const dummyData = [
-  {
-    id: 1,
-    title: "Profile",
-    icon: "person-outline",
-  },
-  {
-    id: 2,
-    title: "Order",
-    icon: "bag-outline",
-  },
-  {
-    id: 3,
-    title: "Address",
-    icon: "location-outline",
-  },
-  {
-    id: 4,
-    title: "Payment",
-    icon: "card-outline",
-  },
-];
-// TODO: Get data
-// TODO: Add logic
+import { accountSection } from "../../constants/data";
 function AccountScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={dummyData}
+        data={accountSection}
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => {
           return (

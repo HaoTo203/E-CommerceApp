@@ -1,4 +1,6 @@
 import {
+  FlatList,
+  Image,
   Keyboard,
   StyleSheet,
   Text,
@@ -15,24 +17,47 @@ import PrimaryButton from "../components/ui/PrimaryButton";
 import Review from "../models/Review";
 import { postReview } from "../util/http";
 import { AuthContext } from "../store/auth-context";
+import { launchImageLibraryAsync } from "expo-image-picker";
 
 function WriteReviewScreen({ route, navigation }) {
   const [isTextInputFocused, setIsTextInputFocused] = useState(false);
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
+  const [imageUri, setImageUri] = useState([]);
   const authContext = useContext(AuthContext);
 
   const productId = route.params.productId;
 
   async function sendReviewHandler() {
-    const myReview = new Review(authContext.uid, rating, review, "");
-    // TODO: Add image
+    const myReview = new Review(authContext.uid, rating, review, imageUri);
     try {
       await postReview(authContext.token, productId, myReview);
     } catch (error) {
       console.log(error.message);
     }
     navigation.goBack();
+  }
+
+  async function chooseImageHandler() {
+    /*
+      - Launch camera to take an image
+      - Upload image to storage and get uri
+      - Upload uri in realtime database
+
+      *Note: The storage is not provide rest api to upload image, need to use SDKs.
+      The code belove just upload direct uri from device to realtime database
+      so other user cannot load this image
+    */
+    try {
+      const image = await launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+      });
+      !image.canceled && setImageUri((prev) => [...prev, image.assets[0].uri]);
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   return (
@@ -85,29 +110,28 @@ function WriteReviewScreen({ route, navigation }) {
         <View style={styles.partContainer}>
           <Text style={styles.title}>Add Photo</Text>
           <View style={{ flexDirection: "row", marginVertical: 16 }}>
-            <IconButton
-              style={{ width: 88, height: 88, marginHorizontal: 3 }}
-              icon={
-                <Ionicons name="add" size={36} color={Colors.Neutral_Grey} />
-              }
-            />
-            <IconButton
-              style={{ width: 88, height: 88, marginHorizontal: 3 }}
-              icon={
-                <Ionicons name="add" size={36} color={Colors.Neutral_Grey} />
-              }
-            />
-            <IconButton
-              style={{ width: 88, height: 88, marginHorizontal: 3 }}
-              icon={
-                <Ionicons name="add" size={36} color={Colors.Neutral_Grey} />
-              }
-            />
-            <IconButton
-              style={{ width: 88, height: 88, marginHorizontal: 3 }}
-              icon={
-                <Ionicons name="add" size={36} color={Colors.Neutral_Grey} />
-              }
+            {imageUri.length < 3 && (
+              <IconButton
+                onPress={chooseImageHandler}
+                style={{ width: 88, height: 88, marginHorizontal: 3 }}
+                icon={
+                  <Ionicons name="add" size={36} color={Colors.Neutral_Grey} />
+                }
+              />
+            )}
+            <FlatList
+              style={{ flex: 1 }}
+              horizontal={true}
+              keyExtractor={(item) => item}
+              data={imageUri}
+              renderItem={(item) => {
+                return (
+                  <Image
+                    style={{ height: 88, width: 88, marginHorizontal: 3 }}
+                    source={{ uri: item.item }}
+                  />
+                );
+              }}
             />
           </View>
         </View>

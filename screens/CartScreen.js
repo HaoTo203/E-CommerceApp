@@ -1,5 +1,6 @@
 import {
   FlatList,
+  Keyboard,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -29,6 +30,7 @@ function CartScreen({ navigation }) {
   const [offer, setOffer] = useState(0.0);
   const [couponCode, setCouponCode] = useState("");
 
+  // This function using function from util http to fetch data
   const fetchData = async () => {
     async function getCartProducts() {
       setRefreshing(true);
@@ -79,6 +81,11 @@ function CartScreen({ navigation }) {
               return (
                 <OrderProductItem
                   onDeletePress={(productId) => {
+                    /*
+                      Function remove product from user cart include
+                      - Remove from database
+                      - Remove from context
+                    */
                     const deleteHandler = async () => {
                       try {
                         const response = await deleteCartProduct(
@@ -94,6 +101,11 @@ function CartScreen({ navigation }) {
                     deleteHandler();
                   }}
                   onChangeQuantity={(product) => {
+                    /*
+                      Function change product quantity from user cart include
+                      - Change in database
+                      - Change in context
+                    */
                     const onUpdate = async () => {
                       try {
                         await updateCartProductQuantity(
@@ -133,13 +145,17 @@ function CartScreen({ navigation }) {
           />
           <PrimaryButton
             onPress={async () => {
-              const coupon = await getCouponByCode(
+              /*
+                Function check user coupon
+              */
+              Keyboard.dismiss();
+              const coupons = await getCouponByCode(
                 authContext.token,
                 couponCode
               );
 
-              if (!!coupon) {
-                setOffer(coupon.offer);
+              if (coupons.length != 0) {
+                setOffer(coupons[0].offer);
               } else {
                 setOffer(0.0);
               }
@@ -216,7 +232,7 @@ function CartScreen({ navigation }) {
         </View>
       </View>
 
-      {/* Notify */}
+      {/* Checkout */}
       <PrimaryButton
         style={{ marginBottom: 4, marginHorizontal: 8 }}
         onPress={() => {

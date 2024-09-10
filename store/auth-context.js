@@ -2,6 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { createContext, useState } from "react";
 
+// This context use for authenticate user
+
 export const AuthContext = createContext({
   token: "",
   uid: "",
@@ -18,6 +20,9 @@ function AuthContextProvider({ children }) {
     setAuthUid(key.uid);
     setAuthToken(key.token);
     const loginTime = !!key.loginTime ? key.loginTime : new Date();
+
+    // Save user authenticate to local storage whenever user close app in order to
+    // re authenticate when token not expire
     AsyncStorage.setItem("token", key.token);
     AsyncStorage.setItem("uid", key.uid);
     AsyncStorage.setItem("loginTime", loginTime.toISOString());

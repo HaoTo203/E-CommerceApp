@@ -7,6 +7,7 @@ function PaymentScreen({ route, navigation }) {
   const data = route.params?.data;
   return (
     <View style={styles.container}>
+      {/* Pay by credit card */}
       <ListItem
         onPress={() => {
           navigation.navigate("CardScreen", !!data && { data: data });
@@ -21,6 +22,8 @@ function PaymentScreen({ route, navigation }) {
         }
         title="Credit Card Or Debit"
       />
+
+      {/* Other payment method */}
       <ListItem
         onPress={() => {
           ToastAndroid.showWithGravity(

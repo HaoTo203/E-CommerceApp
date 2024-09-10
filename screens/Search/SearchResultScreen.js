@@ -33,42 +33,42 @@ const dummyData = [
 
 const dummyData2 = [
   {
-    id: "295e5cda-951e-4d7a-ac1e-e0adcb91cd85",
+    productId: "295e5cda-951e-4d7a-ac1e-e0adcb91cd85",
     image: "http://dummyimage.com/244x100.png/cc0000/ffffff",
     brand: "Adidas",
     price: 233.3,
     offer: 0.49,
   },
   {
-    id: "f5c26e55-6cf3-4e70-b2ed-346a9a8a3c9a",
+    productId: "f5c26e55-6cf3-4e70-b2ed-346a9a8a3c9a",
     image: "http://dummyimage.com/211x100.png/ff4444/ffffff",
     brand: "Reebok",
     price: 195.11,
     offer: 0.96,
   },
   {
-    id: "83ef052a-c5c6-4d7b-8db0-10b9f586d20c",
+    productId: "83ef052a-c5c6-4d7b-8db0-10b9f586d20c",
     image: "http://dummyimage.com/209x100.png/ff4444/ffffff",
     brand: "Reebok",
     price: 122.39,
     offer: 0.71,
   },
   {
-    id: "b79eca7f-099f-4e3b-aac3-96cda140bbef",
+    productId: "b79eca7f-099f-4e3b-aac3-96cda140bbef",
     image: "http://dummyimage.com/245x100.png/ff4444/ffffff",
     brand: "Adidas",
     price: 212.36,
     offer: 0.58,
   },
   {
-    id: "83ef052a-c5c6-4d7b-8db0-10b9f520c",
+    productId: "83ef052a-c5c6-4d7b-8db0-10b9f520c",
     image: "http://dummyimage.com/209x100.png/ff4444/ffffff",
     brand: "Reebok",
     price: 122.39,
     offer: 0.71,
   },
   {
-    id: "b79eca7f-099f-4e3b-aac3-cda140bbef",
+    productId: "b79eca7f-099f-4e3b-aac3-cda140bbef",
     image: "http://dummyimage.com/245x100.png/ff4444/ffffff",
     brand: "Adidas",
     price: 212.36,
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContainer: {
+    flex: 1,
     marginVertical: 8,
     marginHorizontal: 16,
   },

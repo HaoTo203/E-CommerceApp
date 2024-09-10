@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../store/user-data-context";
 import { deleteFavoriteProduct, getProductById } from "../util/http";
 import { AuthContext } from "../store/auth-context";
-import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 function FavoriteProductScreen({ navigation }) {
   const userDataContext = useContext(UserDataContext);

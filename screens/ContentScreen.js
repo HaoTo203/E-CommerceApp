@@ -1,9 +1,6 @@
 import { Image, StyleSheet, View, ScrollView } from "react-native";
 import ProductList from "../components/product/ProductList";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import IconButton from "../components/ui/IconButton";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "../constants/styles";
 import { AuthContext } from "../store/auth-context";
 import { getProductById, getProductIdByType } from "../util/http";
 

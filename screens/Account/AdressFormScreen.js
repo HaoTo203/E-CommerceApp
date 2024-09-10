@@ -1,13 +1,5 @@
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  ToastAndroid,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { Colors } from "../../constants/styles";
 import { Ionicons } from "@expo/vector-icons";
@@ -21,6 +13,10 @@ import {
   deleteUserAddress,
   updateUserAddress,
 } from "../../util/http";
+
+/*
+  This screen use for edit, add, delete address
+*/
 
 function AddressFormScreen({ route, navigation }) {
   const [selectedProvince, setSelectedProvince] = useState(null);

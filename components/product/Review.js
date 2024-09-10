@@ -9,32 +9,15 @@ import {
 import { Rating } from "react-native-ratings";
 import { Colors } from "../../constants/styles";
 import { getMMMDDYYYFormattedDate } from "../../util/date";
-
-const dummyData = [
-  {
-    key: 1,
-    imageUri: "../../asset/images/review/Product_Picture01.png",
-  },
-  {
-    key: 2,
-    imageUri: "../../asset/images/review/Product_Picture02.png",
-  },
-  {
-    key: 3,
-    imageUri: "../../asset/images/review/Product_Picture03.png",
-  },
-];
-// TODO: get user information, and review image
 function Review({ style, data }) {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.userContainer}>
-        <Image
-          style={styles.profileImage}
-          source={require("../../assets/images/ProfilePicture.png")}
-        />
+        <Image style={styles.profileImage} source={{ uri: data.userAvatar }} />
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>James Lowson</Text>
+          <Text style={styles.name}>
+            {data.username?.firstName + " " + data.username?.lastName}
+          </Text>
           <Rating
             type="star"
             ratingCount={5}
@@ -51,14 +34,14 @@ function Review({ style, data }) {
         style={{ marginVertical: 8 }}
         showsHorizontalScrollIndicator={false}
         horizontal
-        data={dummyData}
+        data={data.imageUri}
         bounces={false}
         renderItem={(itemData) => {
           return (
             <Pressable onPress={() => {}}>
               <Image
                 style={{ marginHorizontal: 4, width: 96, height: 96 }}
-                source={require("../../assets/images/review/Product_Picture01.png")}
+                source={{ uri: itemData.item }}
               />
             </Pressable>
           );
