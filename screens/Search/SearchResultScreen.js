@@ -3,82 +3,19 @@ import IconButton from "../../components/ui/IconButton";
 import Input from "../../components/ui/Input";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Octicons from "@expo/vector-icons/Octicons";
-import { useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { Colors } from "../../constants/styles";
 import RecommendForm from "./RecommendForm";
 import ProductList from "../../components/product/ProductList";
-
-const dummyData = [
-  {
-    id: 1,
-    text: "Recommend Product",
-  },
-  {
-    id: 2,
-    text: "Recommend Product",
-  },
-  {
-    id: 3,
-    text: "Recommend Product",
-  },
-  {
-    id: 4,
-    text: "Recommend Product",
-  },
-  {
-    id: 5,
-    text: "Recommend Product",
-  },
-];
-
-const dummyData2 = [
-  {
-    productId: "295e5cda-951e-4d7a-ac1e-e0adcb91cd85",
-    image: "http://dummyimage.com/244x100.png/cc0000/ffffff",
-    brand: "Adidas",
-    price: 233.3,
-    offer: 0.49,
-  },
-  {
-    productId: "f5c26e55-6cf3-4e70-b2ed-346a9a8a3c9a",
-    image: "http://dummyimage.com/211x100.png/ff4444/ffffff",
-    brand: "Reebok",
-    price: 195.11,
-    offer: 0.96,
-  },
-  {
-    productId: "83ef052a-c5c6-4d7b-8db0-10b9f586d20c",
-    image: "http://dummyimage.com/209x100.png/ff4444/ffffff",
-    brand: "Reebok",
-    price: 122.39,
-    offer: 0.71,
-  },
-  {
-    productId: "b79eca7f-099f-4e3b-aac3-96cda140bbef",
-    image: "http://dummyimage.com/245x100.png/ff4444/ffffff",
-    brand: "Adidas",
-    price: 212.36,
-    offer: 0.58,
-  },
-  {
-    productId: "83ef052a-c5c6-4d7b-8db0-10b9f520c",
-    image: "http://dummyimage.com/209x100.png/ff4444/ffffff",
-    brand: "Reebok",
-    price: 122.39,
-    offer: 0.71,
-  },
-  {
-    productId: "b79eca7f-099f-4e3b-aac3-cda140bbef",
-    image: "http://dummyimage.com/245x100.png/ff4444/ffffff",
-    brand: "Adidas",
-    price: 212.36,
-    offer: 0.58,
-  },
-];
+import { getProductByName } from "../../util/http";
+import { AuthContext } from "../../store/auth-context";
+import { searchHint } from "../../constants/data";
 
 function SearchResultScreen({ route, navigation }) {
   const [searchText, setSearchText] = useState(route.params.search);
   const [isSearching, setIsSearching] = useState(false);
+  const [products, setProducts] = useState(route.params.products);
+  const authContext = useContext(AuthContext);
 
   function searchHandler(isEdit) {
     setIsSearching(isEdit);
@@ -91,7 +28,7 @@ function SearchResultScreen({ route, navigation }) {
           <>
             {/* Search Container */}
             <View style={[styles.searchContainer]}>
-              {/* Voice */}
+              {/* Back button */}
               <IconButton
                 style={{ borderWidth: 0 }}
                 icon={
@@ -105,12 +42,28 @@ function SearchResultScreen({ route, navigation }) {
                   />
                 }
               />
+              {/* Search Box */}
               <Input
                 style={styles.searchInput}
                 placeHolder="Search Product"
                 leftIcon="search"
                 inputOptions={{
                   returnKeyType: "search",
+                  onSubmitEditing: async () => {
+                    /*
+                      This helper function get the exact data by comparing name, 
+                      not get substring of the name which need to be done in server side.
+                    */
+                    try {
+                      const response = await getProductByName(
+                        authContext.token,
+                        searchText
+                      );
+                      setProducts(response);
+                    } catch (error) {
+                      console.log(error.message);
+                    }
+                  },
                   value: searchText,
                   onChangeText: (enteredValue) => {
                     setSearchText(enteredValue);
@@ -120,6 +73,7 @@ function SearchResultScreen({ route, navigation }) {
                 onEdit={searchHandler}
               />
 
+              {/* Both Sort Button and Filter Button was not implement */}
               {/* Sort */}
               <IconButton
                 style={{ borderWidth: 0, padding: 8 }}
@@ -153,14 +107,23 @@ function SearchResultScreen({ route, navigation }) {
   }, [navigation, setSearchText, searchText, searchHandler]);
 
   return isSearching ? (
-    <RecommendForm data={dummyData} />
+    /*
+      Recommend text when user typing. This feature can be provide by third party.
+      This data can also get by calculate most search text by database
+    */
+    <RecommendForm
+      data={searchHint}
+      onItemPress={(text) => {
+        setSearchText(text);
+      }}
+    />
   ) : (
     <View style={styles.listContainer}>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>{dummyData2.length} Result</Text>
+        <Text style={styles.titleText}>{products.length} Result</Text>
       </View>
       <ProductList
-        items={dummyData2}
+        items={products}
         listOptions={{
           showsVerticalScrollIndicator: false,
           numColumns: 2,

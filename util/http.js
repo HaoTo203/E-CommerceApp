@@ -370,6 +370,22 @@ export async function getProductIdByType(token, type, number) {
   return productIds;
 }
 
+export async function getProductByName(token, name) {
+  const response = await axios.get(
+    BACKEND_URL +
+      `/products.json?auth=${token}&orderBy="brand"&equalTo="${name}"`,
+    {
+      timeout: 30000,
+    }
+  );
+  const products = [];
+  for (const key in response.data) {
+    products.push({ ...response.data[key], productId: key });
+  }
+
+  return products;
+}
+
 export async function getNotificationById(token, notId) {
   const response = await axios.get(
     BACKEND_URL + `/notifications/${notId}.json?auth=${token}`,

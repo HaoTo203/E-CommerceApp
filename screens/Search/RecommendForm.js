@@ -2,20 +2,19 @@ import { FlatList, Pressable, Text } from "react-native";
 import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 
-function RecommendForm({ data }) {
+function RecommendForm({ data, onItemPress }) {
   const navigation = useNavigation();
 
   return (
     <FlatList
+      keyboardShouldPersistTaps="handled"
       data={data}
       keyExtractor={(item) => item.id}
       renderItem={(dataItem) => {
         return (
           <Pressable
             onPress={() => {
-              navigation.navigate("SearchResultScreen", {
-                search: dataItem.item.text,
-              });
+              onItemPress(dataItem.item.text);
             }}
             style={({ pressed }) => [
               { padding: 16 },

@@ -2,34 +2,17 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import IconButton from "../../components/ui/IconButton";
 import Input from "../../components/ui/Input";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { Colors } from "../../constants/styles";
 import RecommendForm from "./RecommendForm";
-
-const dummyData = [
-  {
-    id: 1,
-    text: "Recommend Product",
-  },
-  {
-    id: 2,
-    text: "Recommend Product",
-  },
-  {
-    id: 3,
-    text: "Recommend Product",
-  },
-  {
-    id: 4,
-    text: "Recommend Product",
-  },
-  {
-    id: 5,
-    text: "Recommend Product",
-  },
-];
+import { getProductByName } from "../../util/http";
+import { AuthContext } from "../../store/auth-context";
+import { searchHint } from "../../constants/data";
 
 function SearchScreen({ navigation }) {
+  const authContext = useContext(AuthContext);
+  const [searchText, setSearchText] = useState("");
+
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => {
@@ -60,10 +43,33 @@ function SearchScreen({ navigation }) {
                 inputOptions={{
                   returnKeyType: "search",
                   autoFocus: true,
+                  onSubmitEditing: async () => {
+                    /*
+                      This helper function get the exact data by comparing name, 
+                      not get substring of the name which need to be done in server side.
+                    */
+                    try {
+                      const response = await getProductByName(
+                        authContext.token,
+                        searchText
+                      );
+                      navigation.navigate("SearchResultScreen", {
+                        search: searchText,
+                        products: response,
+                      });
+                    } catch (error) {
+                      console.log(error.message);
+                    }
+                  },
+                  value: searchText,
+                  onChangeText: (enteredText) => {
+                    setSearchText(enteredText);
+                  },
                 }}
                 iconColor={Colors.Primary_Blue}
               />
 
+              {/* This Voice button was not implement */}
               {/* Voice */}
               <IconButton
                 style={{ borderWidth: 0, paddingRight: 8 }}
@@ -81,9 +87,21 @@ function SearchScreen({ navigation }) {
         );
       },
     });
-  }, [navigation]);
+  }, [navigation, setSearchText, searchText]);
 
-  return <RecommendForm data={dummyData} />;
+  return (
+    /*
+      Recommend Text (Search Hint) when user typing. This feature can be provide by third party.
+      This data can also get by calculate most search text by database.
+      Here we just go with constant
+    */
+    <RecommendForm
+      data={searchHint}
+      onItemPress={(text) => {
+        setSearchText(text);
+      }}
+    />
+  );
 }
 
 export default SearchScreen;

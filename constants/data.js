@@ -49,6 +49,29 @@ export const orderStatus = [
   },
 ];
 
+export const searchHint = [
+  {
+    id: 1,
+    text: "Shoe",
+  },
+  {
+    id: 2,
+    text: "Shirt",
+  },
+  {
+    id: 3,
+    text: "Dress",
+  },
+  {
+    id: 4,
+    text: "Bag",
+  },
+  {
+    id: 5,
+    text: "Helmet",
+  },
+];
+
 export const accountSection = [
   {
     id: 1,
