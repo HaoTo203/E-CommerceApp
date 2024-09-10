@@ -42,15 +42,19 @@ import UserDataContextProvider, {
 } from "./store/user-data-context";
 import * as Notifications from "expo-notifications";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => {
-    return {
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-    };
-  },
-});
+/*
+  Can handle push notification in this part but don't have a server to run logic
+  Also need add permission in order to run handle notification in background
+*/
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => {
+//     return {
+//       shouldShowAlert: true,
+//       shouldPlaySound: false,
+//       shouldSetBadge: false,
+//     };
+//   },
+// });
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
