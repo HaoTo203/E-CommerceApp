@@ -27,8 +27,8 @@ IOs and Android
 ## ScreenShot
 
 <div style="flex-direction: row">
-  <img src="./resources/home.png">
-  <img src="./resources/login.png">
+  <img src="./resources/home.png " width="300">
+  <img src="./resources/login.png" width="300">
 </div>
 
 ## Libraries
