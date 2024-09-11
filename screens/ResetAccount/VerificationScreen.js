@@ -4,10 +4,9 @@ import { useState } from "react";
 import { Colors } from "../../constants/styles";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import TextButton from "../../components/ui/TextButton";
+import { sendVerificationLink } from "../../util/auth";
 
 function VerificationScreen({ route, navigation }) {
-  const [enteredCode, setEnteredCode] = useState("");
-  const [codeInvalid, setCodeInvalid] = useState(false);
   const email = route.params.email;
   return (
     <View style={styles.container}>
@@ -16,24 +15,8 @@ function VerificationScreen({ route, navigation }) {
 
       {/* Title */}
       <Text style={styles.primaryText}>Verified your email address</Text>
-      <Text style={styles.subText}>A verification code has been sent to</Text>
+      <Text style={styles.subText}>A verification email has been sent to</Text>
       <Text style={styles.email}>{email}</Text>
-
-      {/* Input Verification Code */}
-      <Input
-        style={styles.inputContainer}
-        placeHolder="Verification Code"
-        leftIcon="code-slash"
-        isError={codeInvalid}
-        errorText="Incorrect Code"
-        inputOptions={{
-          returnKeyType: "done",
-          value: enteredCode,
-          onChangeText: (enteredValue) => {
-            setEnteredCode(enteredValue);
-          },
-        }}
-      />
 
       <View
         style={{
@@ -45,7 +28,7 @@ function VerificationScreen({ route, navigation }) {
         <TextButton
           style={{ flex: 1, alignItems: "flex-end" }}
           onPress={() => {
-            //TODO: Resend verification code
+            sendVerificationLink(email);
           }}
         >
           Resend Code
@@ -55,13 +38,11 @@ function VerificationScreen({ route, navigation }) {
       {/* Next Button */}
       <PrimaryButton
         onPress={() => {
-          //TODO: check if code is correct
-
-          navigation.navigate("ResetPasswordScreen", { email: email });
+          navigation.navigate("LoginScreen");
         }}
         style={{ marginHorizontal: 16 }}
       >
-        Next
+        Sign In
       </PrimaryButton>
     </View>
   );

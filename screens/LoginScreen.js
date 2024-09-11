@@ -112,6 +112,7 @@ function LoginScreen({ navigation }) {
       {/* Or the sign in method */}
       {true && (
         <>
+          {/* Using firebase SDKs so not implement yet! */}
           <IconButton
             icon={<Image source={require("../assets/images/Google.png")} />}
             style={styles.iconButtonContainer}

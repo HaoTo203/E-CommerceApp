@@ -35,7 +35,6 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ForgotPasswordScreen from "./screens/ResetAccount/ForgotPasswordScreen";
 import VerificationScreen from "./screens/ResetAccount/VerificationScreen";
-import ResetPasswordScreen from "./screens/ResetAccount/ResetPasswordScreen";
 import * as SplashScreen from "expo-splash-screen";
 import UserDataContextProvider, {
   UserDataContext,
@@ -95,16 +94,6 @@ function AuthStack() {
         }}
         name="VerificationScreen"
         component={VerificationScreen}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          title: "",
-          headerTintColor: Colors.Neutral_Grey,
-          headerShadowVisible: false,
-        }}
-        name="ResetPasswordScreen"
-        component={ResetPasswordScreen}
       />
     </Stack.Navigator>
   );
