@@ -1,6 +1,6 @@
 # React-Native-Ecommerce
 
-A boilerplate for a ecommerce mobile app using React Native and Redux.
+An ecommerce mobile app using React Native.
 IOs and Android
 
 ## Features
